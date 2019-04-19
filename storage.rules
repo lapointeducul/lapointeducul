@@ -2,7 +2,7 @@ service firebase.storage {
   match /b/{bucket}/o {
     match /LPDC {
       match /{episode} {
-        allow read
+        allow read, write
       }
     }
     match /{allPaths=**} {
