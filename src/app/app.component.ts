@@ -1,10 +1,11 @@
-import { Component, ViewChild } from '@angular/core';
-import { ModalDirective } from 'angular-bootstrap-md';
-import { FormControl } from '@angular/forms';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
+import { FormGroup, FormBuilder } from '@angular/forms';
+import { BehaviorSubject } from 'rxjs';
+import { APP_CONSTANTS } from './constants';
 
 @Component({
   selector: 'app-root',
@@ -12,10 +13,15 @@ import 'firebase/storage';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+  @ViewChild('fileInput') fileInput: ElementRef;
 
   public episodes = [];
+  public uploadForm: FormGroup;
+  public file: File;
 
-  constructor() {
+  public upload$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
+  constructor(private formBuilder: FormBuilder) {
     const config = {
       apiKey: 'AIzaSyC92nZCkcEjSJM5bDpgY4Hmwtx9BM3RGdU',
       authDomain: 'cdn-lapointeducul.firebaseapp.com',
@@ -26,26 +32,59 @@ export class AppComponent {
     };
     firebase.initializeApp(config);
 
-    const db = firebase.firestore();
-    const storage = firebase.storage();
+    this.fetchEpisodes();
 
-    db.collection('episodes').get()
+    this.uploadForm = this.formBuilder.group({
+      title: '',
+      filename: '',
+      userFile: null
+    });
+  }
+
+  public fetchEpisodes() {
+    this.episodes = [];
+    firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_COLLECTION).get()
       .then(({ docs }) => docs.map(async (doc) => {
+        const { title, fileName } = doc.data();
         this.episodes.push({
-          ...doc.data(),
           id: doc.id,
-          link: await storage.ref().child(`LPDC/${doc.data().fileName}`).getDownloadURL(),
+          title,
+          fileName,
+          link: await firebase.storage().ref().child(`${APP_CONSTANTS.STORAGE_FOLDER}/${fileName}`).getDownloadURL(),
         });
       }));
+  }
 
-    /**
-     * function writeUserData(userId, name, email, imageUrl) {
-  firebase.database().ref('users/' + userId).set({
-    username: name,
-    email: email,
-    profile_picture : imageUrl
-  });
-}
-     */
+  public onSelectFile(event) {
+    if (event.target.files && event.target.files.length > 0) {
+      this.file = event.target.files[0];
+      this.uploadForm.get('filename').setValue(this.file.name);
+    }
+  }
+
+  public selectFile(): void {
+    this.fileInput.nativeElement.click();
+  }
+
+  public sendFile() {
+    const title = this.uploadForm.get('title').value;
+    const fileName = this.file.name;
+    if (!title || !fileName.endsWith('.mp3') || this.file.size > 500000000) {
+      return; // > 500 Mo
+    }
+    this.upload$.next(true);
+    firebase.storage().ref().child(`${APP_CONSTANTS.STORAGE_FOLDER}/${fileName}`)
+      .put(this.file, {
+        contentType: 'audio/mp3',
+      })
+      .then(() => {
+        this.fetchEpisodes();
+        this.upload$.next(false);
+      });
+    const episodesRef = firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_COLLECTION);
+    episodesRef.doc(episodesRef.doc().id).set({
+      title,
+      fileName,
+    });
   }
 }
