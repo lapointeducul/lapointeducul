@@ -2,6 +2,9 @@ import { Component, ViewChild } from '@angular/core';
 import { ModalDirective } from 'angular-bootstrap-md';
 import { FormControl } from '@angular/forms';
 import * as firebase from 'firebase/app';
+import 'firebase/auth';
+import 'firebase/firestore';
+import 'firebase/storage';
 
 @Component({
   selector: 'app-root',
@@ -9,19 +12,8 @@ import * as firebase from 'firebase/app';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  @ViewChild(ModalDirective) modal: ModalDirective;
 
-  timeInput = new FormControl();
-  subjectInput = new FormControl();
-  locationInput = new FormControl();
-  descriptionInput = new FormControl();
-
-  events: Array<any> = [
-    { time: '08:00', subject: 'Breakfast with Simon', location: 'Lounge Caffe', description: 'Discuss Q3 targets' },
-    { time: '08:30', subject: 'Daily Standup Meeting (recurring)', location: 'Warsaw Spire Office' },
-    { time: '09:00', subject: 'Call with HRs' },
-    { time: '12:00', subject: 'Lunch with Timothy', location: 'Canteen', description: 'Project evalutation ile declaring a variable and using an if statement is a fine way to conditionally render a component, sometimes you might want to use a' },
-  ];
+  public episodes = [];
 
   constructor() {
     const config = {
@@ -33,28 +25,27 @@ export class AppComponent {
       messagingSenderId: '402647607443'
     };
     firebase.initializeApp(config);
-  }
 
-  addNewEvent() {
-    const newEvent: any = {
-      time: this.timeInput.value,
-      subject: this.subjectInput.value,
-      location: this.locationInput.value,
-      description: this.descriptionInput.value
-    };
+    const db = firebase.firestore();
+    const storage = firebase.storage();
 
-    this.events.push(newEvent);
+    db.collection('episodes').get()
+      .then(({ docs }) => docs.map(async (doc) => {
+        this.episodes.push({
+          ...doc.data(),
+          id: doc.id,
+          link: await storage.ref().child(`LPDC/${doc.data().fileName}`).getDownloadURL(),
+        });
+      }));
 
-    this.timeInput.setValue('');
-    this.subjectInput.setValue('');
-    this.locationInput.setValue('');
-    this.descriptionInput.setValue('');
-
-    this.modal.hide();
-  }
-
-  deleteEvent(event: any) {
-    const itemIndex = this.events.findIndex(el => el === event);
-    this.events.splice(itemIndex, 1);
+    /**
+     * function writeUserData(userId, name, email, imageUrl) {
+  firebase.database().ref('users/' + userId).set({
+    username: name,
+    email: email,
+    profile_picture : imageUrl
+  });
+}
+     */
   }
 }
