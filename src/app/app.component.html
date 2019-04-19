@@ -1,51 +1,57 @@
-<header class="h-100">
-  <mdb-navbar SideClass="navbar fixed-top navbar-expand-lg navbar-dark scrolling-navbar intro-fixed-nav"
-    [containerInside]="false">
-    <mdb-navbar-brand>
-      <a class="logo navbar-brand" href="#">
-        <strong>La Pointe Du Cul</strong>
-      </a>
-    </mdb-navbar-brand>
-    <links>
+<header>
+  <nav class="navbar fixed-top navbar-expand-lg navbar-dark purple-gradient scrolling-navbar">
+    <a class="navbar-brand" href="#"><strong>La Pointe Du Cul</strong></a>
+    <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
+      aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto">
-        <li class="nav-item active waves-light" mdbWavesEffect>
-          <a class="nav-link">Home
-            <span class="sr-only">(current)</span>
-          </a>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Episodes</a>
         </li>
-        <li class="nav-item waves-light" mdbWavesEffect>
-          <a class="nav-link">Link</a>
+        <li class="nav-item">
+          <a class="nav-link" href="#">A propos</a>
         </li>
-        <li class="nav-item waves-light" mdbWavesEffect>
-          <a class="nav-link">Profile</a>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Lexique</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Lien</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" (click)="showUpload = true">Upload</a>
         </li>
       </ul>
-    </links>
-  </mdb-navbar>
-  <!-- Main -->
-  <div class="view intro-2" style="">
-    <div class="full-bg-img">
-      <div class="mask rgba-purple-light flex-center">
-        <div class="container text-center white-text wow fadeInUp">
-          <h2>La Pointe Du Cul</h2>
-          <br>
-          <h5>Présentation</h5>
-          <p>Description</p>
-        </div>
-      </div>
+      <ul class="navbar-nav nav-flex-icons">
+        <li class="nav-item">
+          <a class="nav-link">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"><i class="fab fa-facebook-f"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"><i class="fab fa-twitter"></i></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link"><i class="fab fa-instagram"></i></a>
+        </li>
+      </ul>
     </div>
-  </div>
-  <!-- /.Main -->
+  </nav>
 </header>
-
 <main>
-  <div class="container">
+  <div style="text-align: center;">
+    <img src="/assets/banner.png" alt="banner" />
+  </div>
+  <div class="view container full-bg-img">
     <div class="column">
       <div class="c-card-ct row">
+        <mat-progress-bar *ngIf="!episodes.length" mode="indeterminate"></mat-progress-bar>
         <div class="c-card col-sm-6" *ngFor="let episode of episodes">
           <mdb-card cascade="true" narrower="true">
             <div class="view-cascade gradient-card-header purple-gradient">
-              <h4 class="card-title"></h4>
+              <h4 class="card-title">{{ episode.title }}</h4>
             </div>
             <div class="view-cascade overlay waves-light" mdbWavesEffect>
               <mdb-card-img src="/assets/lpdc.png"></mdb-card-img>
@@ -54,84 +60,50 @@
               </a>
             </div>
             <mdb-card-body cascade="true" class="text-center">
-              <!--<h5 class="pink-text"><i class="fas fa-utensils"></i>{{ episode.categorie }}</h5>-->
-              <h4 class="card-title">{{ episode.title }}</h4>
+              <mdb-card-text><i>{{ episode.date }}</i></mdb-card-text>
               <mdb-card-text> {{ episode.description }}</mdb-card-text>
-              <button mdbBtn type="button" gradient="purple" rounded="true" mdbWavesEffect>
-                  <a style="color: white;" [href]="episode.link">Ecouter</a>
-              </button>
+              <audio controls="controls">
+                <source [src]="episode.link" type="audio/mp3" />
+                Your browser does not support the code audio element.
+              </audio>
             </mdb-card-body>
           </mdb-card>
         </div>
       </div>
     </div>
-    <mat-card style="background-color: gainsboro">
+    <mat-card *ngIf="showUpload" style="background-color: gainsboro">
       <mat-card-header>
         <h2>Uploader un épisode</h2>
       </mat-card-header>
       <mat-card-content>
         <form [formGroup]="uploadForm">
-          <input type="file" id="userFile" (change)="onSelectFile($event)" #fileInput style="display: none">
-          <mat-form-field>
-            <input matInput formControlName="title" placeholder="Titre" required>
-          </mat-form-field>
-          <mat-form-field>
-            <input matInput formControlName="filename" placeholder="Fichier" required readonly>
-          </mat-form-field>
-          <button mat-button (click)="selectFile()">Selectionner</button>
-          <button [disabled]="!uploadForm.valid" color="primary" mat-raised-button (click)="sendFile()">Envoyer</button>
+          <div>
+            <mat-form-field>
+              <input matInput formControlName="password" placeholder="Upload password" required>
+            </mat-form-field>
+          </div>
+          <div>
+            <mat-form-field>
+              <input matInput formControlName="title" placeholder="Titre" required>
+            </mat-form-field>
+            <mat-form-field>
+              <input matInput formControlName="filename" placeholder="Fichier" required readonly>
+            </mat-form-field>
+            <input type="file" id="userFile" (change)="onSelectFile($event)" #fileInput style="display: none">
+            <button mat-button (click)="selectFile()">Selectionner</button>
+          </div>
+          <div>
+            <mat-form-field>
+              <textarea matInput formControlName="description" placeholder="Description" required></textarea>
+            </mat-form-field>
+          </div>
+          <div>
+            <button [disabled]="!uploadForm.valid" color="primary" mat-raised-button
+              (click)="sendFile()">Envoyer</button>
+          </div>
           <mat-progress-bar *ngIf="(upload$ | async)" mode="indeterminate"></mat-progress-bar>
         </form>
       </mat-card-content>
     </mat-card>
   </div>
 </main>
-
-<footer class="page-footer font-small blue pt-4">
-  <div class="container-fluid text-center text-md-left">
-    <div class="row">
-      <div class="col-md-6 mt-md-0 mt-3">
-        <h5 class="text-uppercase">Footer Content</h5>
-        <p>Texte de bas de page</p>
-      </div>
-      <hr class="clearfix w-100 d-md-none pb-3">
-      <div class="col-md-3 mb-md-0 mb-3">
-        <h5 class="text-uppercase">Links</h5>
-        <ul class="list-unstyled">
-          <li>
-            <a href="#!">Link 1</a>
-          </li>
-          <li>
-            <a href="#!">Link 2</a>
-          </li>
-          <li>
-            <a href="#!">Link 3</a>
-          </li>
-          <li>
-            <a href="#!">Link 4</a>
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-3 mb-md-0 mb-3">
-        <h5 class="text-uppercase">Links</h5>
-        <ul class="list-unstyled">
-          <li>
-            <a href="#!">Link 1</a>
-          </li>
-          <li>
-            <a href="#!">Link 2</a>
-          </li>
-          <li>
-            <a href="#!">Link 3</a>
-          </li>
-          <li>
-            <a href="#!">Link 4</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </div>
-  <div class="footer-copyright text-center py-3">© 2019 Copyright:
-    <a href="https://mdbootstrap.com/education/angular/">lapointeducul</a>
-  </div>
-</footer>

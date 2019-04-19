@@ -7,13 +7,14 @@ import { AppComponent } from './app.component';
 import { MDBBootstrapModule } from 'angular-bootstrap-md';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { EventComponent } from './components/event/event.component'
 import { AppMaterialModule } from './app.material.module';
+
+import * as moment from 'moment';
+moment.locale('fr');
 
 @NgModule({
   declarations: [
     AppComponent,
-    EventComponent
   ],
   imports: [
     BrowserModule,

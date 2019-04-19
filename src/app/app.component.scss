@@ -1,35 +1,35 @@
+:host {
+	height: 100%;
+}
+
 main {
-    background-color: #fafafa;
+	height: 100%;
+	overflow-y: auto;
+	padding:0;
+	background: url("https://mdbootstrap.com/img/Photos/Others/img (42).jpg") no-repeat center fixed; 
+	-webkit-background-size: cover; /* pour anciens Chrome et Safari */
+	background-size: cover; /* version standardisée */
 }
 
 .c-card-ct {
-    margin: 20px 0;
+	margin: 20px 0;
 }
 
 .c-card {
-    margin-bottom: 20px;
+	margin-bottom: 20px;
+	min-width: 400px;
+}
+
+.card-title {
+	padding: 10px 0 0 20px;
+	color: white;
+	font-weight: bold;
+}
+
+audio {
+	width: 100%;
 }
 
 footer {
-    margin-top: 20px;
-}
-
-.view {
-    background: url("https://mdbootstrap.com/img/Photos/Others/img (40).jpg")no-repeat center center;
-    background-size: cover;
-    height: 100vh;
-}
-
-.navbar {
-    background-color: transparent;
-}
-
-.top-nav-collapse {
-    background-color: #4285F4;
-}
-
-@media only screen and (max-width: 768px) {
-    .navbar {
-        background-color: #4285F4;
-    }
+	margin-top: 20px;
 }
