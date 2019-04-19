@@ -1,5 +1,10 @@
 service firebase.storage {
   match /b/{bucket}/o {
+    match /LPDC {
+      match /{episode} {
+        allow read
+      }
+    }
     match /{allPaths=**} {
       allow read, write: if request.auth!=null;
     }
