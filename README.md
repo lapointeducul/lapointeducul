@@ -23,6 +23,12 @@ npm start
 ```
 For lauch a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
+## Save on GitHub
+```
+COMMIT="Update the website" npm run push-github
+```
+then type user email and password when prompted.
+
 ## Deploy in prod
 ```
 npm run prod
