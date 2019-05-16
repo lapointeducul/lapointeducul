@@ -25,7 +25,7 @@ For lauch a dev server. Navigate to `http://localhost:4200/`. The app will autom
 
 ## Save on GitHub
 ```
-COMMIT="Update the website" npm run push-github
+npm run push --message="Update the website" 
 ```
 then type user email and password when prompted.
 
