@@ -7,7 +7,7 @@
     "start": "ng serve",
     "build": "ng build",
     "prod": "ng build --prod && firebase deploy",
-    "push-github": "git commit -am --process.env.COMMIT && git push",
+    "push-github": "git commit -am --process.env.COMMIT && git push --force-with-lease",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
