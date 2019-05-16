@@ -6,9 +6,15 @@ main {
 	height: 100%;
 	overflow-y: auto;
 	padding:0;
-	background: url("https://mdbootstrap.com/img/Photos/Others/img (42).jpg") no-repeat center fixed; 
+	background: url("/assets/pattern_gris.jpg") no-repeat center fixed; 
 	-webkit-background-size: cover; /* pour anciens Chrome et Safari */
 	background-size: cover; /* version standardisée */
+}
+
+.banner {
+	margin-top: 100px;
+	width: 100%;
+	max-width: 1075px;
 }
 
 .c-card-ct {
@@ -17,7 +23,7 @@ main {
 
 .c-card {
 	margin-bottom: 20px;
-	min-width: 400px;
+	min-width: 300px;
 }
 
 .card-title {

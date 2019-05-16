@@ -71,7 +71,7 @@ export class AppComponent {
       description: 'La Pointe Du Cul',
       feed_url: 'https://cdn-lapointeducul.firebaseapp.com/rss.xml',
       site_url: 'https://cdn-lapointeducul.firebaseapp.com',
-      image_url: 'https://cdn-lapointeducul.firebaseapp.com/assets/lpdc.png',
+      image_url: 'https://cdn-lapointeducul.firebaseapp.com/assets/jpg.png',
       managingEditor: 'Corzeam',
       webMaster: 'monster',
       copyright: '2019 lpdc',
@@ -125,6 +125,7 @@ export class AppComponent {
       });
     const episodesRef = firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_COLLECTION);
     episodesRef.doc(episodesRef.doc().id).set({
+      episode: this.episodes.length,
       title,
       description,
       fileName,

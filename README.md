@@ -1,28 +1,36 @@
 # lapointeducul
 
-# Global requirement :
-get Node.js
-npm install -g firebase-tools
-npm install
+## Global requirement :
+install GIT : https://git-scm.com/download
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 6.0.0-rc.5.
+install Node.js (LTS) : https://nodejs.org/en/
+
+install VsCode : https://code.visualstudio.com/
+
+## Setup :
+open a terminal, then type :
+
+```
+git clone https://github.com/lapointeducul/lapointeducul.git
+cd lapointeducul
+npm install
+```
+
 
 ## Development server
-ng serve lapointeducul
-Run `` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+```
+npm start
+```
+For lauch a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
-## Demo application
-
-Run `ng serve` for a demo application build with MDB Angular Pro components.
+## Deploy in prod
+```
+npm run prod
+```
+to put online !
 
 ## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+Run `ng generate component component-name` to generate a new component. 
 
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Prod
-
-Run `ng prod` then `firebase deploy` to put online !
+You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
