@@ -33,10 +33,22 @@ npm run push --message="Update the website"
 then type user email and password when prompted.
 
 ## Deploy in prod
+
+First time you want to deploy the website, run 
+
+```
+npx firebase login
+```
+else run 
 ```
 npm run prod
 ```
 to put online !
+
+## Manage Episodes on the firebase cloud
+
+go to https://console.firebase.google.com/?hl=fr
+
 
 ## Code scaffolding
 
