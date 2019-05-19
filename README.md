@@ -23,6 +23,9 @@ npm start
 ```
 For lauch a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
+## Developpement
+Go to `src/app` folder and make your magic here.
+
 ## Save on GitHub
 ```
 npm run push --message="Update the website" 
