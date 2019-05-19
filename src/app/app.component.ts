@@ -132,4 +132,8 @@ export class AppComponent {
       date: moment().format('L'),
     });
   }
+
+  public openTab(url: string) {
+    window.open(url, '_blank');
+  }
 }
