@@ -8,32 +8,12 @@ main {
 	padding:0;
 	background: url("/assets/pattern_noir_2.jpg") no-repeat center fixed; 
 	-webkit-background-size: cover; /* pour anciens Chrome et Safari */
-	background-size: cover; /* version standardisée */
+  background-size: cover; /* version standardisée */
+  padding-top: 100px;
 }
 
-.banner {
-	margin-top: 100px;
-	width: 100%;
-	max-width: 1075px;
-}
-
-.c-card-ct {
-	margin: 20px 0;
-}
-
-.c-card {
-	margin-bottom: 20px;
-	min-width: 300px;
-}
-
-.card-title {
-	padding: 10px 0 0 20px;
-	color: white;
-	font-weight: bold;
-}
-
-audio {
-	width: 100%;
+mdb-card {
+  margin: 0;
 }
 
 footer {

@@ -1,0 +1,64 @@
+<div style="text-align: center;">
+	<img class="banner" src="/assets/banner.jpg" alt="banner" />
+</div>
+<div class="view container full-bg-img">
+	<div class="column">
+		<div class="c-card-ct row">
+			<mat-progress-bar *ngIf="!episodes.length" mode="indeterminate"></mat-progress-bar>
+			<div class="c-card col-sm-6" *ngFor="let episode of episodes">
+				<mdb-card cascade="true" narrower="true">
+					<div class="view-cascade gradient-card-header purple-gradient">
+						<h4 class="card-title">{{ episode.title }}</h4>
+					</div>
+					<div class="view-cascade overlay waves-light" mdbWavesEffect>
+						<mdb-card-img src="/assets/lpdc.jpg"></mdb-card-img>
+						<a>
+							<div class="mask rgba-white-slight"></div>
+						</a>
+					</div>
+					<mdb-card-body cascade="true" class="text-center">
+						<mdb-card-text><i>{{ episode.date }}</i></mdb-card-text>
+						<mdb-card-text [innerHtml]="episode.description"></mdb-card-text>
+						<audio controls="controls">
+							<source [src]="episode.link" type="audio/mp3" />
+							Your browser does not support the code audio element.
+						</audio>
+					</mdb-card-body>
+				</mdb-card>
+			</div>
+		</div>
+	</div>
+	<mat-card *ngIf="showUpload" style="background-color: gainsboro">
+		<mat-card-header>
+			<h2>Uploader un épisode</h2>
+		</mat-card-header>
+		<mat-card-content>
+			<form [formGroup]="uploadForm">
+				<div>
+					<mat-form-field>
+						<input matInput formControlName="password" placeholder="Upload password" required>
+					</mat-form-field>
+				</div>
+				<div>
+					<mat-form-field>
+						<input matInput formControlName="title" placeholder="Titre" required>
+					</mat-form-field>
+					<mat-form-field>
+						<input matInput formControlName="filename" placeholder="Fichier" required readonly>
+					</mat-form-field>
+					<input type="file" id="userFile" (change)="onSelectFile($event)" #fileInput style="display: none">
+					<button mat-button (click)="selectFile()">Selectionner</button>
+				</div>
+				<div>
+					<mat-form-field>
+						<textarea matInput formControlName="description" placeholder="Description" required></textarea>
+					</mat-form-field>
+				</div>
+				<div>
+					<button [disabled]="!uploadForm.valid" color="primary" mat-raised-button (click)="sendFile()">Envoyer</button>
+				</div>
+				<mat-progress-bar *ngIf="(upload$ | async)" mode="indeterminate"></mat-progress-bar>
+			</form>
+		</mat-card-content>
+	</mat-card>
+</div>
