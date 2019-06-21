@@ -1,34 +1,29 @@
 <header>
   <nav class="navbar fixed-top navbar-expand-lg navbar-dark purple-gradient scrolling-navbar">
     <a class="navbar-brand" href="#"><strong>La Pointe Du Cul</strong></a>
-    <button class="navbar-toggler" type="button" aria-controls="navbarSupportedContent" aria-expanded="false"
+    <button class="navbar-toggler" type="button" (click)="menuExpanded = !menuExpanded" aria-expanded="false"
       aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div *ngIf="menuExpanded" class="navbar-collapse">
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
-          <a class="nav-link" href="#">Episodes</a>
+          <a class="nav-link" routerLink="" routerLinkActive="active">Episodes</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">A propos</a>
+          <a class="nav-link" routerLink="a-propos" routerLinkActive="active">A propos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Lexique</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Lien</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#" (click)="showUpload = true">Upload</a>
+          <a class="nav-link" routerLink="lexique" routerLinkActive="lexique">Lexique</a>
         </li>
       </ul>
       <ul class="navbar-nav nav-flex-icons">
         <li class="nav-item">
-          <a class="nav-link">Contact</a>
+          <a class="nav-link" href="mailto:lapointeducul@gmail.com">Contact</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" (click)="openTab('https://www.facebook.com/lapointeducul')"><i class="fab fa-facebook-f"></i></a>
+          <a class="nav-link" (click)="openTab('https://www.facebook.com/lapointeducul')"><i
+              class="fab fa-facebook-f"></i></a>
         </li>
         <li class="nav-item">
           <a class="nav-link" (click)="openTab('https://twitter.com/lapointeducul')"><i class="fab fa-twitter"></i></a>
@@ -41,69 +36,5 @@
   </nav>
 </header>
 <main>
-  <div style="text-align: center;">
-    <img class="banner" src="/assets/banner.jpg" alt="banner" />
-  </div>
-  <div class="view container full-bg-img">
-    <div class="column">
-      <div class="c-card-ct row">
-        <mat-progress-bar *ngIf="!episodes.length" mode="indeterminate"></mat-progress-bar>
-        <div class="c-card col-sm-6" *ngFor="let episode of episodes">
-          <mdb-card cascade="true" narrower="true">
-            <div class="view-cascade gradient-card-header purple-gradient">
-              <h4 class="card-title">{{ episode.title }}</h4>
-            </div>
-            <div class="view-cascade overlay waves-light" mdbWavesEffect>
-              <mdb-card-img src="/assets/lpdc.jpg"></mdb-card-img>
-              <a>
-                <div class="mask rgba-white-slight"></div>
-              </a>
-            </div>
-            <mdb-card-body cascade="true" class="text-center">
-              <mdb-card-text><i>{{ episode.date }}</i></mdb-card-text>
-              <mdb-card-text> {{ episode.description }}</mdb-card-text>
-              <audio controls="controls">
-                <source [src]="episode.link" type="audio/mp3" />
-                Your browser does not support the code audio element.
-              </audio>
-            </mdb-card-body>
-          </mdb-card>
-        </div>
-      </div>
-    </div>
-    <mat-card *ngIf="showUpload" style="background-color: gainsboro">
-      <mat-card-header>
-        <h2>Uploader un épisode</h2>
-      </mat-card-header>
-      <mat-card-content>
-        <form [formGroup]="uploadForm">
-          <div>
-            <mat-form-field>
-              <input matInput formControlName="password" placeholder="Upload password" required>
-            </mat-form-field>
-          </div>
-          <div>
-            <mat-form-field>
-              <input matInput formControlName="title" placeholder="Titre" required>
-            </mat-form-field>
-            <mat-form-field>
-              <input matInput formControlName="filename" placeholder="Fichier" required readonly>
-            </mat-form-field>
-            <input type="file" id="userFile" (change)="onSelectFile($event)" #fileInput style="display: none">
-            <button mat-button (click)="selectFile()">Selectionner</button>
-          </div>
-          <div>
-            <mat-form-field>
-              <textarea matInput formControlName="description" placeholder="Description" required></textarea>
-            </mat-form-field>
-          </div>
-          <div>
-            <button [disabled]="!uploadForm.valid" color="primary" mat-raised-button
-              (click)="sendFile()">Envoyer</button>
-          </div>
-          <mat-progress-bar *ngIf="(upload$ | async)" mode="indeterminate"></mat-progress-bar>
-        </form>
-      </mat-card-content>
-    </mat-card>
-  </div>
+  <router-outlet></router-outlet>
 </main>
