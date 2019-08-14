@@ -1,5 +1,5 @@
 export const APP_CONSTANTS = {
-  STORAGE_FOLDER: 'LPDC',
+  EPISODE_FOLDER: 'LPDC',
   FIRESTORE_COLLECTION: 'episodes',
 };
 

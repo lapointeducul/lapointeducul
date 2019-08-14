@@ -16,6 +16,10 @@ cd lapointeducul
 npm install
 ```
 
+## Get latest version from Github
+```
+git pull
+```
 
 ## Development server
 ```
