@@ -5,7 +5,7 @@ service firebase.storage {
         allow read, write
       }
     }
-    match /lpdc.rss {
+    match /rss {
       allow read, write
     }
     match /{allPaths=**} {

@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit {
   }
 
   public updateRss() {
-    firebase.storage().ref().child(`lpdc.rss`).put(new Blob([this.rssService.getRss(this.episodes)]), { contentType: 'xml' });
+    firebase.storage().ref().child(`rss`).put(new Blob([this.rssService.getRss(this.episodes)]), { contentType: 'xml' });
   }
 
   public onSelectFile(event) {
