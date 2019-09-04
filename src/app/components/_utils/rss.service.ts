@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
+import * as moment from 'moment';
 
 @Injectable()
 export class RssService {
 
   title = 'La Pointe Du Cul';
   url = 'https://cdn-lapointeducul.firebaseapp.com';
-  avatar = this.encode('https://firebasestorage.googleapis.com/v0/b/cdn-lapointeducul.appspot.com/o/assets%2Flpdc_avatar_2.png?alt=media&token=bfc7ac5b-1010-446c-9982-eafa8c13ce0e');
+  avatar = this.encode('https://firebasestorage.googleapis.com/v0/b/cdn-lapointeducul.appspot.com/o/assets%2Flpdc_avatar_2.png?alt=media&token=28a8ea9d-5b10-42d5-b4ec-fa62fda2a97f');
+  order = 0;
 
   public getRss(episodes) {
     return `<?xml version="1.0" encoding="utf-8"?>
     <rss xmlns:media="https://search.yahoo.com/mrss/"
-          xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+          xmlns:itunes="https://www.itunes.com/dtds/podcast-1.0.dtd"
           xmlns:dcterms="https://purl.org/dc/terms/"
           xmlns:spotify="https://www.spotify.com/ns/rss"
           xmlns:psc="https://podlove.org/simple-chapters/"
@@ -58,16 +60,24 @@ export class RssService {
   }
 
   private getEpisodeRss(episode) {
-    return `  <item>
+    const audio: any = document.getElementById(episode.id);
+    const duration = Math.floor(audio.duration);
+    const item = `  <item>
         <guid isPermaLink="false">${this.encode(episode.id)}</guid>
         <author>lapointeducul@gmail.com (Raphaël Guillemot)</author>
         <title>${this.encode(episode.title)}</title>
+        <link>${this.url}</link>
         <media:content type="audio/mpeg" url="${this.encode(episode.link)}" />
         <description>${this.encode(episode.description)}</description>
         <itunes:explicit>yes</itunes:explicit>
         <itunes:image href="${this.avatar}" />
+        <pubDate>${moment(episode.date, 'DD/MM/YYYY').toDate().toUTCString()}</pubDate>
+        <itunes:order>${++this.order}</itunes:order>
+        <itunes:duration>${duration}</itunes:duration>
+        <enclosure url="${this.encode(episode.link)}" length="${duration}" type="audio/mpeg" />
       </item>
     `;
+    return item;
   }
 
   private encode(str) {

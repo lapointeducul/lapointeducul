@@ -19,7 +19,7 @@
           <mdb-card-body cascade="true" class="text-center">
             <mdb-card-text><i>{{ episode.date }}</i></mdb-card-text>
             <mdb-card-text [innerHtml]="episode.description"></mdb-card-text>
-            <audio controls="controls">
+            <audio [id]="episode.id" controls="controls">
               <source [src]="episode.link" type="audio/mp3" />
               Your browser does not support the code audio element.
             </audio>
