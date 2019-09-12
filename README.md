@@ -61,3 +61,6 @@ Run `ng generate component component-name` to generate a new component.
 You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
 
+## TODO
+// Only allow uploads of any image file that's less than 5MB
+allow write: if request.resource.size < 5 * 1024 * 1024 && request.resource.contentType.matches('image/.*');

@@ -5,6 +5,6 @@ export const APP_CONSTANTS = {
 
 export const CONFIG = {
   API_KEY: 'AIzaSyC92nZCkcEjSJM5bDpgY4Hmwtx9BM3RGdU',
-  UPLOAD: '65f70c3e73c0effc555f1c970cc053e32b5a009b9ec25d5241dc3d84562c1628'
+  ADMIN_EMAIL: 'lapointeducul@gmail.com',
 };
 

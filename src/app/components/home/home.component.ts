@@ -24,7 +24,9 @@ export class HomeComponent implements OnInit {
   public uploadForm: FormGroup;
   public file: File;
 
-  public showUpload = false;
+  public showAuth = false;
+  public authForm: FormGroup;
+  public connected = false;
 
   public upload$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
@@ -35,18 +37,21 @@ export class HomeComponent implements OnInit {
   ) {
     this.fetchEpisodes();
 
+    this.authForm = this.formBuilder.group({
+      password: '',
+    });
+
     this.uploadForm = this.formBuilder.group({
       title: '',
       description: '',
       filename: '',
-      password: '',
       userFile: null
     });
   }
 
   public ngOnInit() {
     this.route.queryParams.subscribe(params => {
-      this.showUpload = params.admin === 'true';
+      this.showAuth = params.admin === 'true';
     });
   }
 
@@ -71,14 +76,19 @@ export class HomeComponent implements OnInit {
   public async getPodcast(episode) {
     try {
       episode.link = await firebase.storage().ref().child(`${APP_CONSTANTS.EPISODE_FOLDER}/${episode.fileName}`).getDownloadURL();
-    } 
-    catch(e) {
+    } catch (e) {
       episode.error = e.message;
     }
   }
 
-  public updateRss() {
-    firebase.storage().ref().child(`rss`).put(new Blob([this.rssService.getRss(this.episodes)]), { contentType: 'rss+xml' });
+  public connect() {
+    const password = this.authForm.get('password').value;
+    firebase.auth().signInWithEmailAndPassword(CONFIG.ADMIN_EMAIL, password)
+      .then(a => {
+        this.connected = true;
+        this.showAuth = false;
+      })
+      .catch((e => this.authForm.reset()));
   }
 
   public onSelectFile(event) {
@@ -95,10 +105,9 @@ export class HomeComponent implements OnInit {
   public sendFile() {
     const title = this.uploadForm.get('title').value;
     const description = this.uploadForm.get('description').value;
-    const password = this.uploadForm.get('password').value;
     const fileName = this.file.name;
 
-    if (!title || !fileName.endsWith('.mp3') || this.file.size > 500000000 || sha256.x2(password) !== CONFIG.UPLOAD) {
+    if (!title || !fileName.endsWith('.mp3') || this.file.size > 500000000) {
       return; // > 500 Mo
     }
     this.upload$.next(true);
@@ -115,5 +124,9 @@ export class HomeComponent implements OnInit {
       fileName,
       date: moment().format('L'),
     });
+  }
+
+  public updateRss() {
+    firebase.storage().ref().child(`rss`).put(new Blob([this.rssService.getRss(this.episodes)]), { contentType: 'rss+xml' });
   }
 }

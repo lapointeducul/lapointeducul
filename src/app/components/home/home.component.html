@@ -19,8 +19,9 @@
           <mdb-card-body cascade="true" class="text-center">
             <mdb-card-text><i>{{ episode.date }}</i></mdb-card-text>
             <mdb-card-text [innerHtml]="episode.description"></mdb-card-text>
-            <button *ngIf="!episode.link && !episode.error" color="accent" mat-raised-button (click)="getPodcast(episode)">Écouter</button>
-            <audio *ngIf="episode.link" [id]="episode.id" controls="controls">
+            <button *ngIf="!episode.link && !episode.error" color="accent" mat-raised-button
+              (click)="getPodcast(episode)">Écouter</button>
+            <audio autoplay *ngIf="episode.link" [id]="episode.id" controls="controls">
               <source [src]="episode.link" type="audio/mp3" />
               Your browser does not support the code audio element.
             </audio>
@@ -30,17 +31,29 @@
       </div>
     </div>
   </div>
-  <mat-card *ngIf="showUpload" style="background-color: gainsboro">
+  <mat-card *ngIf="showAuth" style="background-color: gainsboro">
+    <mat-card-header>
+      <h2>Admin panel</h2>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="authForm">
+        <div>
+          <mat-form-field>
+            <input type="password" matInput formControlName="password" placeholder="Password" required>
+          </mat-form-field>
+        </div>
+        <div>
+          <button [disabled]="!authForm.valid" color="accent" mat-raised-button (click)="connect()">Envoyer</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <mat-card *ngIf="connected" style="background-color: gainsboro">
     <mat-card-header>
       <h2>Uploader un épisode</h2>
     </mat-card-header>
     <mat-card-content>
       <form [formGroup]="uploadForm">
-        <div>
-          <mat-form-field>
-            <input matInput formControlName="password" placeholder="Upload password" required>
-          </mat-form-field>
-        </div>
         <div>
           <mat-form-field>
             <input matInput formControlName="title" placeholder="Titre" required>
@@ -63,7 +76,7 @@
       </form>
     </mat-card-content>
   </mat-card>
-  <mat-card *ngIf="showUpload" style="background-color: gainsboro; margin-top: 20px;">
+  <mat-card *ngIf="connected" style="background-color: gainsboro; margin-top: 20px;">
     <mat-card-header>
       <h2>RSS</h2>
     </mat-card-header>
