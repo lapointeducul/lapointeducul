@@ -1,3 +1,4 @@
+import { RssService } from './../_utils/rss.service';
 import { CONFIG, APP_CONSTANTS } from './../../constants';
 import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
@@ -9,12 +10,12 @@ import 'firebase/storage';
 import * as sha256 from 'sha256';
 import { FormGroup, FormBuilder } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
-// import * as RSS from 'rss';
 
 @Component({
   selector: 'lpdc-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  providers: [RssService]
 })
 export class HomeComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
@@ -28,6 +29,7 @@ export class HomeComponent implements OnInit {
   public upload$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
   constructor(
+    private rssService: RssService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
   ) {
@@ -48,49 +50,27 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  public fetchEpisodes() {
+  public async fetchEpisodes(updateRss?) {
     this.episodes = [];
-    firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_COLLECTION).get()
-      .then(({ docs }) => docs.map(async (doc) => {
-        const { title, description, fileName, date } = doc.data();
-        this.episodes.push({
-          id: doc.id,
-          title,
-          description,
-          fileName,
-          date,
-          link: await firebase.storage().ref().child(`${APP_CONSTANTS.STORAGE_FOLDER}/${fileName}`).getDownloadURL(),
-        });
-      }))
-      .then(() => this.updateRss());
+    const { docs } = await firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_COLLECTION).orderBy('episode', 'desc').get();
+    for (const doc of docs) {
+      const { title, description, fileName, date } = doc.data();
+      this.episodes.push({
+        id: doc.id,
+        title,
+        description,
+        fileName,
+        date,
+        link: await firebase.storage().ref().child(`${APP_CONSTANTS.EPISODE_FOLDER}/${fileName}`).getDownloadURL(),
+      });
+    }
+    if (updateRss) {
+      this.updateRss();
+    }
   }
 
   public updateRss() {
-		/*const feed = new RSS({
-			title: 'La Pointe Du Cul',
-			description: 'La Pointe Du Cul',
-			feed_url: 'https://cdn-lapointeducul.firebaseapp.com/rss.xml',
-			site_url: 'https://cdn-lapointeducul.firebaseapp.com',
-			image_url: 'https://cdn-lapointeducul.firebaseapp.com/assets/jpg.png',
-			managingEditor: 'Corzeam',
-			webMaster: 'monster',
-			copyright: '2019 lpdc',
-			language: 'fr',
-			ttl: '60',
-		});
-		this.episodes.forEach(episode => {
-			feed.item({
-				title: episode.title,
-				description: episode.description,
-				url: episode.link, // link to the item
-				author: 'Corzeam',
-				date: episode.date,
-				enclosure: { url: episode.link, file: episode.fileName },
-			});
-		})
-		const xml = feed.xml();
-		debugger;
-		return xml;*/
+    firebase.storage().ref().child(`rss`).put(new Blob([this.rssService.getRss(this.episodes)]), { contentType: 'rss+xml' });
   }
 
   public onSelectFile(event) {
@@ -114,12 +94,9 @@ export class HomeComponent implements OnInit {
       return; // > 500 Mo
     }
     this.upload$.next(true);
-    firebase.storage().ref().child(`${APP_CONSTANTS.STORAGE_FOLDER}/${fileName}`)
-      .put(this.file, {
-        contentType: 'audio/mp3',
-      })
-      .then(() => {
-        this.fetchEpisodes();
+    firebase.storage().ref().child(`${APP_CONSTANTS.EPISODE_FOLDER}/${fileName}`).put(this.file, { contentType: 'audio/mp3' })
+      .then(async () => {
+        this.fetchEpisodes(true);
         this.upload$.next(false);
       });
     const episodesRef = firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_COLLECTION);
