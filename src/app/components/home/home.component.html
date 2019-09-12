@@ -19,10 +19,12 @@
           <mdb-card-body cascade="true" class="text-center">
             <mdb-card-text><i>{{ episode.date }}</i></mdb-card-text>
             <mdb-card-text [innerHtml]="episode.description"></mdb-card-text>
-            <audio [id]="episode.id" controls="controls">
+            <button *ngIf="!episode.link && !episode.error" color="accent" mat-raised-button (click)="getPodcast(episode)">Écouter</button>
+            <audio *ngIf="episode.link" [id]="episode.id" controls="controls">
               <source [src]="episode.link" type="audio/mp3" />
               Your browser does not support the code audio element.
             </audio>
+            <p *ngIf="episode.error" style="color: red;">{{episode.error}}</p>
           </mdb-card-body>
         </mdb-card>
       </div>

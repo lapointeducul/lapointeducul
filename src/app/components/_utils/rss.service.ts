@@ -77,6 +77,7 @@ export class RssService {
         <enclosure url="${this.encode(episode.link)}" length="${duration}" type="audio/mpeg" />
       </item>
     `;
+    // FIXME enclosure url not auto provided, fix when no quota issue
     return item;
   }
 

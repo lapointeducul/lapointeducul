@@ -61,11 +61,19 @@ export class HomeComponent implements OnInit {
         description,
         fileName,
         date,
-        link: await firebase.storage().ref().child(`${APP_CONSTANTS.EPISODE_FOLDER}/${fileName}`).getDownloadURL(),
       });
     }
     if (updateRss) {
       this.updateRss();
+    }
+  }
+
+  public async getPodcast(episode) {
+    try {
+      episode.link = await firebase.storage().ref().child(`${APP_CONSTANTS.EPISODE_FOLDER}/${episode.fileName}`).getDownloadURL();
+    } 
+    catch(e) {
+      episode.error = e.message;
     }
   }
 
