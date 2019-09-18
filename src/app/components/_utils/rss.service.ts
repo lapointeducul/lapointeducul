@@ -11,11 +11,11 @@ export class RssService {
 
   public getRss(episodes) {
     return `<?xml version="1.0" encoding="utf-8"?>
-    <rss xmlns:media="https://search.yahoo.com/mrss/"
-          xmlns:itunes="https://www.itunes.com/dtds/podcast-1.0.dtd"
-          xmlns:dcterms="https://purl.org/dc/terms/"
-          xmlns:spotify="https://www.spotify.com/ns/rss"
-          xmlns:psc="https://podlove.org/simple-chapters/"
+    <rss xmlns:media="http://search.yahoo.com/mrss/"
+          xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd"
+          xmlns:dcterms="http://purl.org/dc/terms/"
+          xmlns:spotify="http://www.spotify.com/ns/rss"
+          xmlns:psc="http://podlove.org/simple-chapters/"
           xmlns:atom="http://www.w3.org/2005/Atom"
           version="2.0">
     <channel>
@@ -60,8 +60,6 @@ export class RssService {
   }
 
   private getEpisodeRss(episode) {
-    const audio: any = document.getElementById(episode.id);
-    const duration = Math.floor(audio.duration);
     const item = `  <item>
         <guid isPermaLink="false">${this.encode(episode.id)}</guid>
         <author>lapointeducul@gmail.com (Raphaël Guillemot)</author>
@@ -73,11 +71,10 @@ export class RssService {
         <itunes:image href="${this.avatar}" />
         <pubDate>${moment(episode.date, 'DD/MM/YYYY').toDate().toUTCString()}</pubDate>
         <itunes:order>${++this.order}</itunes:order>
-        <itunes:duration>${duration}</itunes:duration>
-        <enclosure url="${this.encode(episode.link)}" length="${duration}" type="audio/mpeg" />
+        <itunes:duration>${episode.duration}</itunes:duration>
+        <enclosure url="${this.encode(episode.link)}" length="${episode.duration}" type="audio/mpeg" />
       </item>
     `;
-    // FIXME enclosure url not auto provided, fix when no quota issue
     return item;
   }
 

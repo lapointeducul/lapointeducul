@@ -19,9 +19,7 @@
           <mdb-card-body cascade="true" class="text-center">
             <mdb-card-text><i>{{ episode.date }}</i></mdb-card-text>
             <mdb-card-text [innerHtml]="episode.description"></mdb-card-text>
-            <button *ngIf="!episode.link && !episode.error" color="accent" mat-raised-button
-              (click)="getPodcast(episode)">Écouter</button>
-            <audio autoplay *ngIf="episode.link" [id]="episode.id" controls="controls">
+            <audio *ngIf="episode.link" controls="controls">
               <source [src]="episode.link" type="audio/mp3" />
               Your browser does not support the code audio element.
             </audio>
@@ -63,6 +61,10 @@
           </mat-form-field>
           <input type="file" id="userFile" (change)="onSelectFile($event)" #fileInput style="display: none">
           <button mat-button (click)="selectFile()">Selectionner</button>
+          <audio style="display: none;" id="audioUpload" controls="controls">
+            <source src='' type="audio/mp3" />
+            Your browser does not support the code audio element.
+          </audio>
         </div>
         <div>
           <mat-form-field>

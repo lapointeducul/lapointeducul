@@ -59,12 +59,14 @@ export class HomeComponent implements OnInit {
     this.episodes = [];
     const { docs } = await firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_COLLECTION).orderBy('episode', 'desc').get();
     for (const doc of docs) {
-      const { title, description, fileName, date } = doc.data();
+      const { title, description, fileName, link, duration, date } = doc.data();
       this.episodes.push({
         id: doc.id,
         title,
         description,
         fileName,
+        link,
+        duration,
         date,
       });
     }
@@ -95,6 +97,9 @@ export class HomeComponent implements OnInit {
     if (event.target.files && event.target.files.length > 0) {
       this.file = event.target.files[0];
       this.uploadForm.get('filename').setValue(this.file.name);
+      let audio = <HTMLAudioElement>document.getElementById('audioUpload');
+      audio.src = URL.createObjectURL(this.file)
+      audio.load();
     }
   }
 
@@ -111,19 +116,34 @@ export class HomeComponent implements OnInit {
       return; // > 500 Mo
     }
     this.upload$.next(true);
-    firebase.storage().ref().child(`${APP_CONSTANTS.EPISODE_FOLDER}/${fileName}`).put(this.file, { contentType: 'audio/mp3' })
-      .then(async () => {
-        this.fetchEpisodes(true);
-        this.upload$.next(false);
-      });
-    const episodesRef = firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_COLLECTION);
-    episodesRef.doc(episodesRef.doc().id).set({
+
+    const audio: any = document.getElementById("audioUpload");
+    const duration = Math.floor(audio.duration);
+    const episodeMeta = {
       episode: this.episodes.length,
       title,
       description,
       fileName,
+      duration,
       date: moment().format('L'),
-    });
+    }
+    
+    const fileRef = firebase.storage().ref().child(`${APP_CONSTANTS.EPISODE_FOLDER}/${fileName}`);
+    fileRef.put(this.file, { contentType: 'audio/mp3' })
+      .then(async () => {
+        await this.createEpisodeDoc(fileRef, episodeMeta);
+        this.fetchEpisodes(true);
+        this.upload$.next(false);
+      });
+  }
+
+  private async createEpisodeDoc(fileRef, episodeMeta) {
+    const link = await fileRef.getDownloadURL();
+    const episodesRef = firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_COLLECTION);
+    episodesRef.doc(episodesRef.doc().id).set({
+      ...episodeMeta,
+      link,
+    })
   }
 
   public updateRss() {
