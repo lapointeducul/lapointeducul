@@ -7,19 +7,20 @@
       <mat-progress-bar *ngIf="!episodes.length" mode="indeterminate"></mat-progress-bar>
       <div class="c-card col-sm-6" *ngFor="let episode of episodes">
         <mdb-card cascade="true" narrower="true">
-          <div class="view-cascade gradient-card-header purple-gradient">
+          <div *ngIf="!episode.spotifyLink" class="view-cascade gradient-card-header purple-gradient">
             <h4 class="card-title">{{ episode.title }}</h4>
           </div>
-          <div class="view-cascade overlay waves-light" mdbWavesEffect>
+          <div *ngIf="!episode.spotifyLink" class="view-cascade overlay waves-light" mdbWavesEffect>
             <mdb-card-img src="/assets/lpdc_avatar_2.png"></mdb-card-img>
             <a>
               <div class="mask rgba-white-slight"></div>
             </a>
           </div>
+          <iframe *ngIf="episode.spotifyLink" [src]="episode.spotifyLinkSanitized" width="100%" height="232" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
           <mdb-card-body cascade="true" class="text-center">
             <mdb-card-text><i>{{ episode.date }}</i></mdb-card-text>
             <mdb-card-text [innerHtml]="episode.description"></mdb-card-text>
-            <audio *ngIf="episode.link" controls="controls">
+            <audio *ngIf="episode.link && !episode.spotifyLink" controls="controls">
               <source [src]="episode.link" type="audio/mp3" />
               Your browser does not support the code audio element.
             </audio>
@@ -76,6 +77,20 @@
         </div>
         <mat-progress-bar *ngIf="(upload$ | async)" mode="indeterminate"></mat-progress-bar>
       </form>
+    </mat-card-content>
+  </mat-card>
+  <mat-card *ngIf="connected" style="background-color: gainsboro; margin-top: 20px;">
+    <mat-card-header>
+      <h2>Liens Spotify</h2>
+    </mat-card-header>
+    <mat-card-content>
+      <div *ngFor="let episode of episodes">
+        <mat-form-field class="spotify-link-field">
+          <input matInput placeholder="{{episode.title}}" required [(ngModel)]="episode.spotifyLink">
+        </mat-form-field>
+      </div>
+      <p>Attention. Sur Spotify, "Partager" > "Copier le code embed" > Extraire l'URL. L'option "Copier le lien" ne donnera pas la même URL!</p>
+      <button color="accent" mat-raised-button (click)="updateSpotifyLinks()">Valider</button>
     </mat-card-content>
   </mat-card>
   <mat-card *ngIf="connected" style="background-color: gainsboro; margin-top: 20px;">

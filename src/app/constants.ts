@@ -1,6 +1,6 @@
 export const APP_CONSTANTS = {
   EPISODE_FOLDER: 'LPDC',
-  FIRESTORE_COLLECTION: 'episodes',
+  FIRESTORE_EPISODES_COLLECTION: 'episodes',
 };
 
 export const CONFIG = {

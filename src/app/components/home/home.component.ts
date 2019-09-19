@@ -2,13 +2,13 @@ import { RssService } from './../_utils/rss.service';
 import { CONFIG, APP_CONSTANTS } from './../../constants';
 import * as moment from 'moment';
 import { ActivatedRoute } from '@angular/router';
+import { FormGroup, FormBuilder } from '@angular/forms';
 import { Component, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import * as firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
-import * as sha256 from 'sha256';
-import { FormGroup, FormBuilder } from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 
 @Component({
@@ -34,6 +34,7 @@ export class HomeComponent implements OnInit {
     private rssService: RssService,
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
+    public sanitizer: DomSanitizer,
   ) {
     this.fetchEpisodes();
 
@@ -57,29 +58,23 @@ export class HomeComponent implements OnInit {
 
   public async fetchEpisodes(updateRss?) {
     this.episodes = [];
-    const { docs } = await firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_COLLECTION).orderBy('episode', 'desc').get();
+    const { docs } = await firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_EPISODES_COLLECTION).orderBy('episode', 'desc').get();
     for (const doc of docs) {
-      const { title, description, fileName, link, duration, date } = doc.data();
+      const { title, description, fileName, duration, date, link, spotifyLink } = doc.data();
       this.episodes.push({
         id: doc.id,
         title,
         description,
         fileName,
-        link,
         duration,
         date,
+        link,
+        spotifyLink,
+        spotifyLinkSanitized: this.sanitizer.bypassSecurityTrustResourceUrl(spotifyLink),
       });
     }
     if (updateRss) {
       this.updateRss();
-    }
-  }
-
-  public async getPodcast(episode) {
-    try {
-      episode.link = await firebase.storage().ref().child(`${APP_CONSTANTS.EPISODE_FOLDER}/${episode.fileName}`).getDownloadURL();
-    } catch (e) {
-      episode.error = e.message;
     }
   }
 
@@ -138,11 +133,27 @@ export class HomeComponent implements OnInit {
   }
 
   private async createEpisodeDoc(fileRef, episodeMeta) {
-    const link = await fileRef.getDownloadURL();
-    const episodesRef = firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_COLLECTION);
+    let error;
+    let link;
+    try {
+      link = await fileRef.getDownloadURL();
+    } catch (e) {
+      error = e.message;
+    }
+    const episodesRef = firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_EPISODES_COLLECTION);
     episodesRef.doc(episodesRef.doc().id).set({
       ...episodeMeta,
       link,
+      error,
+    })
+  }
+
+  public updateSpotifyLinks() {
+    const episodesRef = firebase.firestore().collection(APP_CONSTANTS.FIRESTORE_EPISODES_COLLECTION);
+    this.episodes.forEach(({ id, spotifyLink}) => {
+      episodesRef.doc(id).update({
+        spotifyLink,
+      });
     })
   }
 
