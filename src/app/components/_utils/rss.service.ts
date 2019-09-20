@@ -6,7 +6,7 @@ export class RssService {
 
   title = 'La Pointe Du Cul';
   url = 'https://lapointeducul.fr';
-  avatar = this.encode('https://firebasestorage.googleapis.com/v0/b/cdn-lapointeducul.appspot.com/o/assets%2Flpdc_avatar_2.png?alt=media&token=28a8ea9d-5b10-42d5-b4ec-fa62fda2a97f');
+  avatar = 'https://lapointeducul.fr/assets/episode.png';
   order = 0;
 
   public getRss(episodes) {
