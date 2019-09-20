@@ -88,7 +88,8 @@ d’aller dans les recoins, de montrer son incroyable diversité. ${this.url}</d
     p.textContent = str;
     if (extractClass) {
       p.innerHTML = str;
-      return this.encode(p.getElementsByClassName(extractClass)[0].innerHTML);
+      if (p.getElementsByClassName(extractClass).length)
+        return this.encode(p.getElementsByClassName(extractClass)[0].innerHTML);
     }
     return p.innerHTML;
   }

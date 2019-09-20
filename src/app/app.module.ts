@@ -1,6 +1,7 @@
 import { GlossaryComponent } from './components/glossary/glossary.component';
 import { AboutComponent } from './components/about/about.component';
 import { HomeComponent } from './components/home/home.component';
+import { AdminComponent } from './components/home/admin/admin.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
@@ -13,7 +14,6 @@ import * as moment from 'moment';
 
 moment.locale('fr');
 
-
 const appRoutes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'lexique', component: GlossaryComponent },
@@ -25,6 +25,7 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     HomeComponent,
+    AdminComponent,
     GlossaryComponent,
     AboutComponent,
   ],
