@@ -37,6 +37,7 @@ const appRoutes: Routes = [
     ReactiveFormsModule,
     RouterModule.forRoot(
       appRoutes,
+      { useHash: true },
       // { enableTracing: true } // <-- debugging purposes only
     ),
     AppMaterialModule,
