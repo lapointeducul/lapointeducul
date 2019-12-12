@@ -1,4 +1,3 @@
-import { RssService } from './../_utils/rss.service';
 import { CONFIG, APP_CONSTANTS } from './../../constants';
 import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormBuilder } from '@angular/forms';
@@ -15,7 +14,6 @@ import { AdminComponent } from './admin/admin.component';
   selector: 'lpdc-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  providers: [RssService]
 })
 export class HomeComponent implements OnInit {
   @ViewChild('admin') admin: AdminComponent;
@@ -75,5 +73,9 @@ export class HomeComponent implements OnInit {
         this.showAuth = false;
       })
       .catch((e => this.authForm.reset()));
+  }
+
+  public openTab(url: string) {
+    window.open(url, '_blank');
   }
 }
