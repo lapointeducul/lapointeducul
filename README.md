@@ -3,7 +3,7 @@
 ## Global requirement :
 install GIT : https://git-scm.com/download
 
-install Node.js (LTS) : https://nodejs.org/en/
+install Node.js 8.9 (LTS) : https://nodejs.org/en/
 
 install VsCode : https://code.visualstudio.com/
 

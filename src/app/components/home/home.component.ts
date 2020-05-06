@@ -25,6 +25,18 @@ export class HomeComponent implements OnInit {
 
   public upload$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
+  public WEBSITES = [
+    { name: 'Spotify', url: 'https://bit.ly/LPDC-Spotify'},
+    { name: 'Deezer', url: 'https://bit.ly/LPDC-Deezer'},
+    { name: 'Apple podcast', url: 'https://bit.ly/LPDC-Apple'},
+    { name: 'Google Podcast', url: 'https://bit.ly/LPDC-GoogleP'},
+    { name: 'Podcast addict', url: 'https://bit.ly/LPDC-Paddict'},
+    { name: 'Pocket Cast', url: 'https://bit.ly/LPDC-PocketC'},
+    { name: 'Breaker', url: 'https://bit.ly/LPDC-Breaker'},
+    { name: 'Castbox', url: 'https://bit.ly/LPDC-Castbox'},
+    { name: 'Radio Public', url: 'https://bit.ly/LPDC-RadioP'},
+  ];
+
   constructor(
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,

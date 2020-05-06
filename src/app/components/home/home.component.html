@@ -5,10 +5,14 @@
   <div class="column">
     <div class="c-card-ct row">
       <mat-progress-bar *ngIf="!episodes.length" mode="indeterminate"></mat-progress-bar>
-      <mdb-card class="help-us" cascade="true" narrower="true">
-        <div class="help-us-content">
-            Aidez nous à faire vivre le podcast: Abonnez vous pour le soutenir, et si la pointe du coeur vous en dit... 
-            <button color="primary" mat-raised-button (click)="openTab('https://fr.tipeee.com/lapointeducul')">Faire un don</button>
+      <mdb-card class="find-help-us" cascade="true" narrower="true">
+        <div class="find-help-us-content text-center">
+          <p>Retrouvez nous sur<p>
+          <div>
+            <button *ngFor="let website of WEBSITES" color="primary" mat-raised-button (click)="openTab(website.url)">{{website.name}}</button>
+          </div>
+          <p>et aidez nous à faire vivre le podcast: Abonnez vous pour le soutenir, et si la pointe du coeur vous en dit...</p>
+          <button color="accent" mat-raised-button (click)="openTab('https://fr.tipeee.com/lapointeducul')">Faire un don</button>
         </div>
       </mdb-card>
       <div class="c-card col-sm-6" *ngFor="let episode of episodes">
