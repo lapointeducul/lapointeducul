@@ -35,6 +35,7 @@ export class HomeComponent implements OnInit {
     { name: 'Breaker', url: 'https://bit.ly/LPDC-Breaker'},
     { name: 'Castbox', url: 'https://bit.ly/LPDC-Castbox'},
     { name: 'Radio Public', url: 'https://bit.ly/LPDC-RadioP'},
+    { name: 'Overcast', url: 'https://bit.ly/LPDC-Overcast'},
   ];
 
   constructor(

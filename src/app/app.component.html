@@ -1,11 +1,7 @@
 <header>
-  <nav class="navbar fixed-top navbar-expand-lg navbar-dark purple-gradient scrolling-navbar">
-    <a class="navbar-brand" href="#"><strong>La Pointe Du Cul</strong></a>
-    <button class="navbar-toggler" type="button" (click)="menuExpanded = !menuExpanded" aria-expanded="false"
-      aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div *ngIf="menuExpanded" class="navbar-collapse">
+  <mdb-navbar SideClass="navbar fixed-top navbar-expand-lg navbar-dark purple-gradient scrolling-navbar">
+    <mdb-navbar-brand><a class="navbar-brand" href="#">La Pointe Du Cul</a></mdb-navbar-brand>
+    <links>
       <ul class="navbar-nav mr-auto">
         <li class="nav-item">
           <a class="nav-link" routerLink="" routerLinkActive="active">Episodes</a>
@@ -35,8 +31,8 @@
           <a class="nav-link" (click)="openTab('https://bit.ly/LPDC-Insta')"><i class="fab fa-instagram"></i></a>
         </li>
       </ul>
-    </div>
-  </nav>
+    </links>
+  </mdb-navbar>
 </header>
 <main>
   <router-outlet></router-outlet>

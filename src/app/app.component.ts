@@ -12,8 +12,6 @@ import 'firebase/storage';
 })
 export class AppComponent {
 
-  public menuExpanded = true;
-
   constructor(
   ) {
     const config = {
